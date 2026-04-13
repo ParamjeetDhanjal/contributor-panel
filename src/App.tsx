@@ -9,6 +9,7 @@ import { Session } from '@supabase/supabase-js';
 import Auth from './components/Auth';
 import Dashboard from './components/Dashboard';
 import { Loader2 } from 'lucide-react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -117,22 +118,39 @@ export default function App() {
 
     return () => subscription.unsubscribe();
   }, []);
-
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-zinc-950 text-white">
-        <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
-      </div>
-    );
-  }
-
+  
+if (loading) {
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20">
-      {!session ? (
-        <Auth error={authError} />
-      ) : (
-        <Dashboard session={session} />
-      )}
+    <div className="flex h-screen items-center justify-center bg-zinc-950 text-white">
+      <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
     </div>
   );
 }
+
+return (
+  <div className="min-h-screen bg-background text-foreground selection:bg-primary/20">
+    <Routes>
+      <Route
+        path="/"
+        element={
+          !session ? (
+            <Auth error={authError} />
+          ) : (
+            <Navigate to="/dashboard" />
+          )
+        }
+      />
+
+      <Route
+        path="/dashboard"
+        element={
+          session ? (
+            <Dashboard session={session} />
+          ) : (
+            <Navigate to="/" />
+          )
+        }
+      />
+    </Routes>
+  </div>
+);
