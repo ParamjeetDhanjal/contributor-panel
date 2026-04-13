@@ -1,0 +1,5 @@
+{
+  "name": "Contributor",
+  "description": "A dashboard for contributors to track their articles and view their pay with restricted access.",
+  "requestFramePermissions": []
+}
